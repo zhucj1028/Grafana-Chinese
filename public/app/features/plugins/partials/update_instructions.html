@@ -1,0 +1,21 @@
+<div class="modal-body">
+	<div class="modal-header">
+		<h2 class="modal-header-title">
+			<icon name="'cloud-download'" size="'lg'"></icon>
+			<span class="p-l-1">更新插件</span>
+		</h2>
+
+		<a class="modal-header-close" ng-click="dismiss();">
+			<icon name="'times'"></icon>
+		</a>
+	</div>
+
+	<div class="modal-content">
+		<div class="gf-form-group">
+			<p>在命令行上键入以下内容以更新 {{model.name}}.</p>
+			<pre><code>grafana-cli plugins update {{model.id}}</code></pre>
+			<span class="small">查看 {{model.name}}  在<a href="https://grafana.com/plugins/{{model.id}}">Grafana.com</a> 自述文件和变更日志。 如果您无权访问命令行，请咨询您的Grafana管理员。</span>
+		</div>
+		<p class="pluginlist-none-installed"><img class="pluginlist-inline-logo" src="public/img/grafana_icon.svg"><strong>提示</strong>：要立即更新所有插件，请在命令行上输入<code class =“ code--small”> grafana-cli插件update-all </code>。</div>
+	</div>
+</div>

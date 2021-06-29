@@ -1,0 +1,36 @@
+<page-header model="navModel"></page-header>
+
+<div class="page-container page-body">
+	<h3 class="page-sub-heading">你好 {{greeting}}.</h3>
+
+	<div class="modal-tagline p-b-2">
+		<em>{{invitedBy}}</em> 邀请您加入Grafana和该组织 <span class="highlight-word">{{contextSrv.user.orgName}}</span></br>请完成以下操作并选择密码以接受邀请并继续：
+	</div>
+
+	<form name="inviteForm" class="login-form gf-form-group">
+		<div class="gf-form">
+			<span class="gf-form-label width-7">电子邮件</span>
+			<input type="email" name="email" class="gf-form-input max-width-21" required ng-model='formModel.email' placeholder="电子邮件">
+		</div>
+		<div class="gf-form">
+			<span class="gf-form-label width-7">名字</span>
+			<input type="text" name="name" class="gf-form-input max-width-21" ng-model='formModel.name' placeholder="名字 (可选的)">
+		</div>
+		<div class="gf-form">
+			<span class="gf-form-label width-7">用户名</span>
+			<input type="text" name="username" class="gf-form-input max-width-21" required ng-model='formModel.username' placeholder="用户名">
+		</div>
+		<div class="gf-form">
+			<span class="gf-form-label width-7">密码</span>
+			<input type="password" name="password" class="gf-form-input max-width-21" required ng-model="formModel.password" id="inputPassword" placeholder="密码">
+		</div>
+
+		<div class="gf-form-button-row">
+			<button type="submit" class="btn btn-primary" ng-click="submit();" ng-disable="!inviteForm.$valid">
+				注册
+			</button>
+		</div>
+	</form>
+</div>
+
+<footer />

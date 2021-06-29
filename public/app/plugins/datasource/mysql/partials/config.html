@@ -1,0 +1,103 @@
+<h3 class="page-heading">MySQL连接</h3>
+
+<div class="gf-form-group">
+	<div class="gf-form max-width-30">
+		<span class="gf-form-label width-7">主机</span>
+		<input type="text" class="gf-form-input" ng-model='ctrl.current.url' placeholder="localhost:3306" bs-typeahead="{{['localhost:3306', 'localhost:3307']}}" required></input>
+	</div>
+
+	<div class="gf-form max-width-30">
+		<span class="gf-form-label width-7">数据库</span>
+		<input type="text" class="gf-form-input" ng-model='ctrl.current.database' placeholder="数据库名" required></input>
+	</div>
+
+	<div class="gf-form-inline">
+		<div class="gf-form max-width-15">
+			<span class="gf-form-label width-7">用户</span>
+			<input type="text" class="gf-form-input" ng-model='ctrl.current.user' placeholder="用户"></input>
+		</div>
+		<div class="gf-form">
+      <secret-form-field
+        isConfigured="ctrl.current.secureJsonFields.password"
+        value="ctrl.current.secureJsonData.password"
+        on-reset="ctrl.onPasswordReset"
+        on-change="ctrl.onPasswordChange"
+        inputWidth="9"
+      />
+		</div>
+	</div>
+
+	<div class="gf-form-group">
+		<div class="gf-form-inline">
+			<gf-form-checkbox class="gf-form" label="TLS客户端验证" label-class="width-10"
+				checked="ctrl.current.jsonData.tlsAuth" switch-class="max-width-6"></gf-form-checkbox>
+			<gf-form-checkbox class="gf-form" label="使用CA证书" tooltip="所需验证自签名TLS证书" checked="ctrl.current.jsonData.tlsAuthWithCACert" label-class="width-11"
+				switch-class="max-width-6"></gf-form-checkbox>
+		</div>
+		<div class="gf-form-inline">
+			<gf-form-checkbox class="gf-form" label="跳过TLS验证y" label-class="width-10"
+				checked="ctrl.current.jsonData.tlsSkipVerify" switch-class="max-width-6"></gf-form-checkbox>
+		</div>
+	</div>
+
+<datasource-tls-auth-settings current="ctrl.current" ng-if="(ctrl.current.jsonData.tlsAuth || ctrl.current.jsonData.tlsAuthWithCACert)">
+</datasource-tls-auth-settings>
+
+<b>连接限制</b>
+
+<div class="gf-form-group">
+	<div class="gf-form max-width-15">
+		<span class="gf-form-label width-7">最大开放</span>
+		<input type="number" min="0" class="gf-form-input gf-form-input--has-help-icon" ng-model="ctrl.current.jsonData.maxOpenConns" placeholder="无限制"></input>
+		<info-popover mode="right-absolute">
+			与数据库的最大打开连接数。 如果<i>最大空闲连接数</i>大于0，并且<i>最大打开连接数</i>小于<i>最大空闲连接数</i>，则<i>最大空闲连接数</i>将减少以符合<i>最大打开连接数</i>限制。 如果设置为0，则打开的连接数没有限制。
+		</info-popover>
+	</div>
+	<div class="gf-form max-width-15">
+		<span class="gf-form-label width-7">最大空闲</span>
+		<input type="number" min="0" class="gf-form-input gf-form-input--has-help-icon" ng-model="ctrl.current.jsonData.maxIdleConns" placeholder="2"></input>
+		<info-popover mode="right-absolute">
+			空闲连接池中的最大连接数。 如果<i>最大打开连接数</i>大于0但小于<i>最大空闲连接数</i>，则<i>最大空闲连接数</i>将减少以匹配<i >最大开放连接数</i>限制。 如果设置为0，则不保留任何空闲连接。
+		</info-popover>
+	</div>
+	<div class="gf-form max-width-15">
+		<span class="gf-form-label width-7">最大生存时间</span>
+		<input type="number" min="0" class="gf-form-input gf-form-input--has-help-icon" ng-model="ctrl.current.jsonData.connMaxLifetime" placeholder="14400"></input>
+		<info-popover mode="right-absolute">
+			连接可以重用的最长时间（以秒为单位）。 如果设置为0，则连接将永远重复使用。<br/> <br/>
+			这应始终低于mysql中配置的<a href="https://dev.mysql.com/doc/refman/8.0/en/server-system-variables.html#sysvar_wait_timeout" target="_blank">wait_timeout</a>。
+		</info-popover>
+	</div>
+</div>
+
+<h3 class="page-heading">MySQL细节</h3>
+
+<div class="gf-form-group">
+	<div class="gf-form-inline">
+		<div class="gf-form">
+			<span class="gf-form-label width-9">最小时间间隔</span>
+			<input
+        type="text"
+        class="gf-form-input width-6 gf-form-input--has-help-icon"
+        ng-model="ctrl.current.jsonData.timeInterval"
+        spellcheck='false'
+        placeholder="1m"
+        ng-pattern="/^\d+(ms|[Mwdhmsy])$/"
+      ></input>
+			<info-popover mode="right-absolute">
+				自动分组时间间隔的下限。 建议设置为写入频率，例如，如果每分钟写入一次数据，则为<code> 1m </code>。
+			</info-popover>
+		</div>
+	</div>
+</div>
+
+<div class="gf-form-group">
+	<div class="grafana-info-box">
+		<h5>用户权限</h5>
+		<p>
+			只应向数据库用户授予对要查询的指定数据库表的SELECT权限。
+            Grafana不验证查询是否安全，因此查询可以包含任何SQL语句。例如，将执行<code>USE otherdb；</code>和<code>DROP TABLE user；</code>之类的语句。为了防止这种情况，我们建议您创建一个具有受限权限的特定MySQL用户。
+			查阅 <a class="external-link" target="_blank" href="http://docs.grafana.org/features/datasources/mysql/">MySQL数据库文档</a> 获取更多信息。
+		</p>
+	</div>
+</div>

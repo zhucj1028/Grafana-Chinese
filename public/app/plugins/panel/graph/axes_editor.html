@@ -1,0 +1,195 @@
+<div class="editor-row">
+  <div class="gf-form-group" ng-repeat="yaxis in ctrl.panel.yaxes">
+    <h5 class="section-heading" ng-show="$index === 0">左 Y</h5>
+    <h5 class="section-heading" ng-show="$index === 1">右 Y</h5>
+
+    <gf-form-switch
+      class="gf-form"
+      label="显示"
+      label-class="width-6"
+      checked="yaxis.show"
+      on-change="ctrl.render()"
+    ></gf-form-switch>
+
+    <div ng-if="yaxis.show">
+      <div class="gf-form gf-form--grow">
+        <label class="gf-form-label width-6">
+          单位
+          <info-popover mode="right-normal">未由数据源定义或在“字段或替代”配置中使用的默认单位。</info-popover>
+        </label>
+        <unit-picker onChange="ctrl.setUnitFormat(yaxis)" value="yaxis.format" class="flex-grow-1" />
+      </div>
+    </div>
+
+    <div class="gf-form">
+      <label class="gf-form-label width-6">比例</label>
+      <div class="gf-form-select-wrapper max-width-20">
+        <select
+          class="gf-form-input"
+          ng-model="yaxis.logBase"
+          ng-options="v as k for (k, v) in ctrl.logScales"
+          ng-change="ctrl.render()"
+        ></select>
+      </div>
+    </div>
+
+    <div class="gf-form">
+      <label class="gf-form-label width-6">Y-最小</label>
+      <input
+        type="text"
+        class="gf-form-input"
+        placeholder="自动"
+        empty-to-null
+        ng-model="yaxis.min"
+        ng-change="ctrl.render()"
+        ng-model-onblur
+      />
+    </div>
+    <div class="gf-form">
+      <label class="gf-form-label width-6">Y-最大</label>
+      <input
+        type="text"
+        class="gf-form-input"
+        placeholder="自动"
+        empty-to-null
+        ng-model="yaxis.max"
+        ng-change="ctrl.render()"
+        ng-model-onblur
+      />
+    </div>
+
+    <div ng-if="yaxis.show">
+      <div class="gf-form">
+        <label class="gf-form-label width-6">小数点</label>
+        <input
+          type="number"
+          class="gf-form-input width-5"
+          placeholder="自动"
+          empty-to-null
+          bs-tooltip="'覆盖y轴的自动十进制精度'"
+          data-placement="right"
+          ng-model="yaxis.decimals"
+          ng-change="ctrl.render()"
+          ng-model-onblur
+        />
+      </div>
+
+      <div class="gf-form">
+        <label class="gf-form-label width-6">标签</label>
+        <input
+          type="text"
+          class="gf-form-input max-width-20"
+          ng-model="yaxis.label"
+          ng-change="ctrl.render()"
+          ng-model-onblur
+        />
+      </div>
+    </div>
+  </div>
+
+  <div class="gf-form-group">
+    <h5 class="section-heading">Y-轴</h5>
+    <gf-form-switch
+      class="gf-form"
+      label="对齐Y轴"
+      label-class="width-6"
+      switch-class="width-5"
+      checked="ctrl.panel.yaxis.align"
+      on-change="ctrl.render()"
+    ></gf-form-switch>
+    <div class="gf-form" ng-show="ctrl.panel.yaxis.align">
+      <label class="gf-form-label width-6">
+        等级
+      </label>
+      <input
+        type="number"
+        class="gf-form-input width-6"
+        placeholder="0"
+        ng-model="ctrl.panel.yaxis.alignLevel"
+        ng-change="ctrl.render()"
+        ng-model-onblur
+        bs-tooltip="'Y轴的对齐基于此值，从Y = 0开始'"
+        data-placement="right"
+      />
+    </div>
+  </div>
+
+  <div class="gf-form-group" aria-label="{{ctrl.selectors.xAxisSection}}">
+    <h5 class="section-heading">X-轴</h5>
+    <gf-form-switch
+      class="gf-form"
+      label="显示"
+      label-class="width-6"
+      checked="ctrl.panel.xaxis.show"
+      on-change="ctrl.render()"
+    ></gf-form-switch>
+
+    <div class="gf-form">
+      <label class="gf-form-label width-6">模式</label>
+      <div class="gf-form-select-wrapper max-width-15">
+        <select
+          class="gf-form-input"
+          ng-model="ctrl.panel.xaxis.mode"
+          ng-options="v as k for (k, v) in ctrl.xAxisModes"
+          ng-change="ctrl.xAxisModeChanged()"
+        >
+        </select>
+      </div>
+    </div>
+
+    <!-- Series mode -->
+    <div class="gf-form" ng-if="ctrl.panel.xaxis.mode === 'series'">
+      <label class="gf-form-label width-6">值</label>
+      <metric-segment-model
+        property="ctrl.panel.xaxis.values[0]"
+        options="ctrl.xAxisStatOptions"
+        on-change="ctrl.xAxisValueChanged()"
+        custom="false"
+        css-class="width-10"
+        select-mode="true"
+      ></metric-segment-model>
+    </div>
+
+    <!-- Histogram mode -->
+    <div class="gf-form" ng-if="ctrl.panel.xaxis.mode === 'histogram'">
+      <label class="gf-form-label width-6">桶</label>
+      <input
+        type="number"
+        class="gf-form-input max-width-8"
+        ng-model="ctrl.panel.xaxis.buckets"
+        placeholder="自动"
+        ng-change="ctrl.render()"
+        ng-model-onblur
+        bs-tooltip="'桶数'"
+        data-placement="right"
+      />
+    </div>
+
+    <div class="gf-form-inline" ng-if="ctrl.panel.xaxis.mode === 'histogram'">
+      <div class="gf-form">
+        <label class="gf-form-label width-6">X-最小</label>
+        <input
+          type="number"
+          class="gf-form-input width-5"
+          placeholder="自动"
+          empty-to-null
+          ng-model="ctrl.panel.xaxis.min"
+          ng-change="ctrl.render()"
+          ng-model-onblur
+        />
+      </div>
+      <div class="gf-form">
+        <label class="gf-form-label width-6">X-最大</label>
+        <input
+          type="number"
+          class="gf-form-input width-5"
+          placeholder="自动"
+          empty-to-null
+          ng-model="ctrl.panel.xaxis.max"
+          ng-change="ctrl.render()"
+          ng-model-onblur
+        />
+      </div>
+    </div>
+  </div>
+</div>

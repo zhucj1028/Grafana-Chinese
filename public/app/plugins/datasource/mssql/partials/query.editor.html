@@ -1,0 +1,85 @@
+<query-editor-row query-ctrl="ctrl" can-collapse="false">
+	<div class="gf-form-inline">
+		<div class="gf-form gf-form--grow">
+			<code-editor content="ctrl.target.rawSql" datasource="ctrl.datasource" on-change="ctrl.panelCtrl.refresh()" data-mode="sqlserver">
+			</code-editor>
+		</div>
+	</div>
+
+  <div class="gf-form-inline">
+    <div class="gf-form">
+			<label class="gf-form-label query-keyword">格式化为</label>
+			<div class="gf-form-select-wrapper">
+				<select class="gf-form-input gf-size-auto" ng-model="ctrl.target.format" ng-options="f.value as f.text for f in ctrl.formats" ng-change="ctrl.refresh()"></select>
+			</div>
+		</div>
+		<div class="gf-form">
+      <label class="gf-form-label query-keyword" ng-click="ctrl.showHelp = !ctrl.showHelp">
+        显示帮助
+        <icon name="'angle-down'" ng-show="ctrl.showHelp" style="margin-top: 3px;"></icon>
+        <icon name="'angle-right'" ng-hide="ctrl.showHelp" style="margin-top: 3px;"></icon>
+      </label>
+		</div>
+		<div class="gf-form">
+      <label class="gf-form-label query-keyword" ng-click="ctrl.showQueryInspector()">
+        生成的SQL
+        <icon name="'angle-right'" style="margin-top: 3px;"></icon>
+      </label>
+		</div>
+		<div class="gf-form gf-form--grow">
+			<div class="gf-form-label gf-form-label--grow"></div>
+		</div>
+	</div>
+
+	<div class="gf-form"  ng-show="ctrl.showHelp">
+		<pre class="gf-form-pre alert alert-info">时间序列:
+- 返回名称为time的列（以UTC表示），作为unix时间戳或任何sql native date数据类型。 您可以使用下面的宏。
+- 返回的任何其他列将是时间点值。
+可选的:
+  - 返回名为<i> metric </i>的列以表示序列名称。
+  - 如果返回多个值列，则将指标列用作前缀。
+  - 如果未找到名为metric的列，则将value列的列名称用作序列名称
+
+时间序列查询的结果集需要按时间排序。
+
+表格:
+- 返回任何一组列
+
+宏:
+- $__time(column) -&gt; column AS time
+- $__timeEpoch(column) -&gt; DATEDIFF(second, '1970-01-01', column) AS time
+- $__timeFilter(column) -&gt; column BETWEEN '2017-04-21T05:01:17Z' AND '2017-04-21T05:01:17Z'
+- $__unixEpochFilter(column) -&gt; column &gt;= 1492750877 AND column &lt;= 1492750877
+- $__unixEpochNanoFilter(column) -&gt;  column &gt;= 1494410783152415214 AND column &lt;= 1494497183142514872
+- $__timeGroup(column, '5m'[, fillvalue]) -&gt; CAST(ROUND(DATEDIFF(second, '1970-01-01', column)/300.0, 0) as bigint)*300.
+    通过设置fillvalue，grafana将根据间隔填充缺失值
+    fillvalue可以是文字值，NULL或以前的值； 以前的将填充先前看到的值；如果尚未看到，则为NULL
+- $__timeGroupAlias(column, '5m'[, fillvalue]) -&gt; CAST(ROUND(DATEDIFF(second, '1970-01-01', column)/300.0, 0) as bigint)*300 AS [time]
+- $__unixEpochGroup(column,'5m') -&gt; FLOOR(column/300)*300
+- $__unixEpochGroupAlias(column,'5m') -&gt; FLOOR(column/300)*300 AS [time]
+
+分组依据和排序示例 $__timeGroup:
+SELECT
+  $__timeGroup(date_time_col, '1h') AS time,
+  sum(value) as value
+FROM yourtable
+GROUP BY $__timeGroup(date_time_col, '1h')
+ORDER BY 1
+
+或者使用这些仅返回值的宏来构建自己的条件：
+- $__timeFrom() -&gt;  '2017-04-21T05:01:17Z'
+- $__timeTo() -&gt;  '2017-04-21T05:01:17Z'
+- $__unixEpochFrom() -&gt; 1492750877
+- $__unixEpochTo() -&gt; 1492750877
+- $__unixEpochNanoFrom() -&gt;  1494410783152415214
+- $__unixEpochNanoTo() -&gt;  1494497183142514872
+		</pre>
+	</div>
+
+	</div>
+
+	<div class="gf-form" ng-show="ctrl.lastQueryError">
+		<pre class="gf-form-pre alert alert-error">{{ctrl.lastQueryError}}</pre>
+	</div>
+
+</query-editor-row>

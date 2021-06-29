@@ -1,0 +1,90 @@
+<div class="gf-form-group">
+  <div class="gf-form">
+    <label class="gf-form-label query-keyword width-9">服务</label>
+    <div class="gf-form-select-wrapper gf-form-select-wrapper--caret-indent">
+      <select
+        class="gf-form-input service-dropdown"
+        ng-model="ctrl.annotation.queryType"
+        ng-options="f as f for f in ['Application Insights', 'Azure Monitor', 'Azure Log Analytics']"
+      ></select>
+    </div>
+  </div>
+  <div class="gf-form" ng-show="ctrl.annotation.queryType === 'Azure Log Analytics'">
+    <label class="gf-form-label query-keyword width-9">订阅</label>
+    <div class="gf-form-select-wrapper gf-form-select-wrapper--caret-indent">
+      <select
+        class="gf-form-input service-dropdown"
+        ng-model="ctrl.annotation.subscription"
+        ng-options="f.value as f.text for f in ctrl.subscriptions"
+        ng-change="ctrl.onSubscriptionChange()"
+      ></select>
+    </div>
+  </div>
+  <div ng-show="ctrl.annotation.queryType === 'Azure Log Analytics'">
+    <div class="gf-form-inline">
+      <div class="gf-form">
+        <label class="gf-form-label query-keyword width-9">工作空间</label>
+        <div class="gf-form-select-wrapper gf-form-select-wrapper--caret-indent">
+          <select
+            class="gf-form-input min-width-12"
+            ng-model="ctrl.annotation.workspace"
+            ng-options="f.value as f.text for f in ctrl.workspaces"
+          ></select>
+        </div>
+      </div>
+      <div class="gf-form">
+        <div class="width-1"></div>
+      </div>
+      <div class="gf-form">
+        <button class="btn btn-primary width-10" ng-click="ctrl.panelCtrl.refresh()">运行</button>
+      </div>
+      <div class="gf-form">
+        <label class="gf-form-label">(换行：Shift + Enter，运行查询：Enter，触发建议：Ctrl +空格)</label>
+      </div>
+    </div>
+    <kusto-editor
+      class="gf-form gf-form--grow"
+      query="ctrl.annotation.rawQuery"
+      variables="ctrl.templateVariables"
+      change="ctrl.onLogAnalyticsQueryChange"
+      getSchema="ctrl.getAzureLogAnalyticsSchema"
+    />
+  </div>
+
+  <div class="gf-form-inline" ng-show="ctrl.annotation.queryType !== 'Azure Log Analytics'">
+    <div class="gf-form gf-form--grow">
+      <label class="gf-form-label">没有注释支持 {{ctrl.annotation.queryType}}</label>
+    </div>
+  </div>
+
+  <div class="gf-form-inline">
+    <div class="gf-form">
+      <label class="gf-form-label query-keyword" ng-click="ctrl.showHelp = !ctrl.showHelp">
+        显示帮助
+        <icon name="'angle-down'" ng-show="ctrl.showHelp" style="margin-top: 3px;"></icon>
+        <icon name="'angle-right'" ng-hide="ctrl.showHelp" style="margin-top: 3px;"></icon>
+      </label>
+    </div>
+  </div>
+
+  <div class="gf-form" ng-show="ctrl.showHelp">
+    <pre
+      class="gf-form-pre alert alert-info"
+      ng-show="ctrl.annotation.queryType === 'Azure Log Analytics'"
+    ><h6>注释查询格式</h6>
+    注释是覆盖在图形上方的事件。 查询每行最多可以有三列，datetime列是必需的。 注释渲染很昂贵，因此限制返回的行数很重要。
+- 日期时间类型的列。
+- 具有别名的列：<b>文本</b>或<b>文本</b>为注释文本
+- 具有别名的列：<b>标签</b>或<b>标签</b>用于注释标签。 这应该返回以逗号分隔的标签字符串，例如 '标签1，标签2'
+
+宏观:
+    - $__timeFilter() -&gt; TimeGenerated &ge; datetime(2018-06-05T18:09:58.907Z) and TimeGenerated &le; datetime(2018-06-05T20:09:58.907Z)
+    - $__timeFilter(datetimeColumn) -&gt;  datetimeColumn  &ge; datetime(2018-06-05T18:09:58.907Z) and datetimeColumn &le; datetime(2018-06-05T20:09:58.907Z)
+
+    或者使用这些内置变量构建您自己的条件，这些变量仅返回值:
+    - $__timeFrom -&gt;  datetime(2018-06-05T18:09:58.907Z)
+    - $__timeTo -&gt; datetime(2018-06-05T20:09:58.907Z)
+    - $__interval -&gt; 5m
+</pre>
+  </div>
+</div>
