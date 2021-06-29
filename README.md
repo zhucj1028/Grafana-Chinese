@@ -1,6 +1,7 @@
 # `Grafana`-7.2.1中文汉化
 
 这里是已经编译好的直接下载后替换掉对应的bin和public文件即可
+
 在官网下载对应的7.2.1版本：https://grafana.com/grafana/download/7.2.1
 
 - Grafana-chs-7.2.1
