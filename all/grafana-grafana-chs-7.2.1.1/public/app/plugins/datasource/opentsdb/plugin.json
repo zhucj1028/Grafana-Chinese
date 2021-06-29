@@ -1,0 +1,23 @@
+{
+  "type": "datasource",
+  "name": "OpenTSDB",
+  "id": "opentsdb",
+  "category": "tsdb",
+
+  "metrics": true,
+  "defaultMatchFormat": "pipe",
+  "annotations": true,
+  "alerting": true,
+
+  "info": {
+    "description": "开源时间序列数据库",
+    "author": {
+      "name": "Grafana Labs",
+      "url": "https://grafana.com"
+    },
+    "logos": {
+      "small": "img/opentsdb_logo.png",
+      "large": "img/opentsdb_logo.png"
+    }
+  }
+}

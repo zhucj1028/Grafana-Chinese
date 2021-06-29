@@ -1,0 +1,104 @@
+
+<h3 class="page-heading">MSSQL链接</h3>
+
+<div class="gf-form-group">
+	<div class="gf-form max-width-30">
+		<span class="gf-form-label width-7">主机</span>
+		<input type="text" class="gf-form-input" ng-model='ctrl.current.url' placeholder="localhost:1433" bs-typeahead="{{['localhost', 'localhost:1433']}}" required></input>
+	</div>
+
+	<div class="gf-form max-width-30">
+		<span class="gf-form-label width-7">数据库</span>
+		<input type="text" class="gf-form-input" ng-model='ctrl.current.database' placeholder="数据库名" required></input>
+	</div>
+
+	<div class="gf-form-inline">
+		<div class="gf-form max-width-15">
+			<span class="gf-form-label width-7">用户</span>
+			<input type="text" class="gf-form-input" ng-model='ctrl.current.user' placeholder="user"></input>
+		</div>
+    <div class="gf-form">
+      <secret-form-field
+        isConfigured="ctrl.current.secureJsonFields.password"
+        value="ctrl.current.secureJsonData.password"
+        on-reset="ctrl.onPasswordReset"
+        on-change="ctrl.onPasswordChange"
+        inputWidth="9"
+      />
+    </div>
+	</div>
+
+	<div class="gf-form">
+		<label class="gf-form-label width-7">加密</label>
+		<div class="gf-form-select-wrapper max-width-15 gf-form-select-wrapper--has-help-icon">
+			<select class="gf-form-input" ng-model="ctrl.current.jsonData.encrypt" ng-options="mode for mode in ['disable', 'false', 'true']" ng-init="ctrl.current.jsonData.encrypt"></select>
+			<info-popover mode="right-absolute">
+				确定是否与服务器协商安全的SSL TCP / IP连接或在多大程度上进行协商。
+				<ul>
+					<li><i>disable</i> - 客户端和服务器之间发送的数据未加密。</li>
+					<li><i>false</i> - 客户端和服务器之间发送的数据不会在登录数据包之外进行加密。 （默认）</li>
+					<li><i>true</i> - 客户端和服务器之间发送的数据已加密。</li>
+				</ul>
+				如果您使用的是Microsoft SQL Server的旧版本（例如2008和2008R2），则可能需要禁用加密才能进行连接。
+			</info-popover>
+		</div>
+	</div>
+</div>
+
+<b>连接限制</b>
+
+<div class="gf-form-group">
+	<div class="gf-form max-width-15">
+		<span class="gf-form-label width-7">最大开放</span>
+		<input type="number" min="0" class="gf-form-input gf-form-input--has-help-icon" ng-model="ctrl.current.jsonData.maxOpenConns" placeholder="unlimited"></input>
+		<info-popover mode="right-absolute">
+			与数据库的最大打开连接数。 如果<i>最大空闲连接数</i>大于0，并且<i>最大打开连接数</i>小于<i>最大空闲连接数</i>，则<i>最大空闲连接数</i>将减少以符合<i>最大打开连接数</i>限制。 如果设置为0，则打开的连接数没有限制。
+		</info-popover>
+	</div>
+	<div class="gf-form max-width-15">
+		<span class="gf-form-label width-7">最大闲置</span>
+		<input type="number" min="0" class="gf-form-input gf-form-input--has-help-icon" ng-model="ctrl.current.jsonData.maxIdleConns" placeholder="2"></input>
+		<info-popover mode="right-absolute">
+			空闲连接池中的最大连接数。 如果<i>最大打开连接数</i>大于0但小于<i>最大空闲连接数</i>，则<i>最大空闲连接数</i>将减少以匹配<i >最大开放连接数</i>限制。 如果设置为0，则不保留任何空闲连接。
+		</info-popover>
+	</div>
+	<div class="gf-form max-width-15">
+		<span class="gf-form-label width-7">最大寿命</span>
+		<input type="number" min="0" class="gf-form-input gf-form-input--has-help-icon" ng-model="ctrl.current.jsonData.connMaxLifetime" placeholder="14400"></input>
+		<info-popover mode="right-absolute">
+			连接可以重用的最长时间（以秒为单位）。 如果设置为0，则连接将永远重复使用。
+		</info-popover>
+	</div>
+</div>
+
+<h3 class="page-heading">MSSQL细节</h3>
+
+<div class="gf-form-group">
+	<div class="gf-form-inline">
+		<div class="gf-form">
+			<span class="gf-form-label width-9">最小时间间隔</span>
+			<input
+        type="text"
+        class="gf-form-input width-6 gf-form-input--has-help-icon"
+        ng-model="ctrl.current.jsonData.timeInterval"
+        spellcheck='false'
+        placeholder="1m"
+        ng-pattern="/^\d+(ms|[Mwdhmsy])$/"
+      ></input>
+			<info-popover mode="right-absolute">
+				自动分组时间间隔的下限。 建议设置为写入频率，例如，如果每分钟写入一次数据，则为<code> 1m </code>。
+			</info-popover>
+		</div>
+	</div>
+</div>
+
+<div class="gf-form-group">
+	<div class="grafana-info-box">
+		<h5>用户权限</h5>
+		<p>
+			仅应授予数据库用户对指定数据库的SELECT权限&amp;您要查询的表。
+Grafana无法验证查询是否安全，因此查询可以包含任何SQL语句。 例如，将执行诸如<code> USE otherdb; </code>和<code> DROP TABLE user; </code>之类的语句。 为了防止这种情况，我们<strong>高度</strong>建议您创建一个具有受限权限的特定MSSQL用户。
+		</p>
+	</div>
+</div>
+

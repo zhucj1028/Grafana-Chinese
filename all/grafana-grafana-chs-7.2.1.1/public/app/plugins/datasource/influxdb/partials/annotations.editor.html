@@ -1,0 +1,24 @@
+
+<div class="gf-form-group">
+	<div class="gf-form">
+		<input type="text" class="gf-form-input" ng-model='ctrl.annotation.query' placeholder="select text from events where $timeFilter limit 1000"></input>
+	</div>
+</div>
+
+<h5 class="section-heading">字段映射 <tip>如果您的influxdb查询返回多个字段，则需要在下面指定列名。 注释事件由标题，标签和附加文本字段组成。</tip></h5>
+<div class="gf-form-group">
+	<div class="gf-form-inline">
+		<div class="gf-form">
+			<span class="gf-form-label width-4">文本</span>
+			<input type="text" class="gf-form-input max-width-10" ng-model='ctrl.annotation.textColumn' placeholder=""></input>
+		</div>
+		<div class="gf-form">
+			<span class="gf-form-label width-4">标签</span>
+			<input type="text" class="gf-form-input max-width-10" ng-model='ctrl.annotation.tagsColumn' placeholder=""></input>
+		</div>
+		<div class="gf-form" ng-show="ctrl.annotation.titleColumn">
+			<span class="gf-form-label width-4">标题 <em class="muted">(deprecated)</em></span>
+			<input type="text" class="gf-form-input max-width-10" ng-model='ctrl.annotation.titleColumn' placeholder=""></input>
+		</div>
+	</div>
+</div>

@@ -1,0 +1,193 @@
+<div class="editor-row">
+
+  <div class="grafana-info-box" ng-if="ctrl.panel.gauge.show">
+    <h5>量规迁移</h5>
+    <p>
+      此面板已弃用。 请迁移到新的“仪表板”面板。
+
+      <div class="gf-form-button-row">
+        <button class="btn btn-primary" ng-click="ctrl.migrateToPanel('gauge')">
+          迁移到量规面板
+        </button>       
+      </div>
+
+      <br/>
+
+      <div ng-if="ctrl.panel.sparkline.show">
+        <b>注意:</b> 量规面板中不支持迷你图
+      </div>
+
+      <div ng-if="ctrl.panel.prefix">
+        <b>注意:</b> 前缀不再受支持，但可以通过自定义单位完成
+      </div>
+
+      <div ng-if="ctrl.panel.postfix">
+        <b>注意:</b> 后缀不再受支持，但可以通过自定义单元来完成
+      </div>
+    </p>
+  </div>
+
+  <div class="grafana-info-box" ng-if="!ctrl.panel.gauge.show">
+    <h5>迁移</h5>
+    <p>
+      此面板已弃用。 请迁移到新的统计信息面板。
+
+      <div class="gf-form-button-row">
+        <button class="btn btn-primary" ng-click="ctrl.migrateToPanel('stat')">
+          迁移到统计面板
+        </button>       
+      </div>
+      
+      <br/>
+
+      <div ng-if="ctrl.panel.prefix">
+        <b>注意:</b> 前缀不再受支持，但可以通过自定义单位完成
+      </div>
+
+      <div ng-if="ctrl.panel.postfix">
+        <b>注意:</b> 后缀不再受支持，但可以通过自定义单元来完成
+      </div>      
+    </p>
+  </div>
+
+
+  <div class="section gf-form-group">
+    <h5 class="section-heading">值</h5>
+
+    <div class="gf-form-inline">
+      <div class="gf-form" ng-if="ctrl.fieldNames.length > 1">
+        <label class="gf-form-label width-6">字段</label>
+        <div class="gf-form-select-wrapper width-12">
+          <select class="gf-form-input" ng-model="ctrl.panel.tableColumn" ng-options="f for f in ctrl.fieldNames" ng-change="ctrl.refresh()"></select>
+        </div>
+      </div>
+    </div>
+    <div class="gf-form-inline">
+      <div class="gf-form">
+        <label class="gf-form-label width-6">显示</label>
+        <div class="gf-form-select-wrapper width-12">
+          <select class="gf-form-input" ng-model="ctrl.panel.valueName" ng-options="f.value as f.text for f in ctrl.valueNameOptions" ng-change="ctrl.refresh()"></select>
+        </div>
+      </div>
+      <div class="gf-form">
+        <label class="gf-form-label width-6">字号</label>
+        <div class="gf-form-select-wrapper">
+          <select class="gf-form-input" ng-model="ctrl.panel.valueFontSize" ng-options="f for f in ctrl.fontSizes" ng-change="ctrl.render()"></select>
+        </div>
+      </div>
+    </div>
+
+    <div class="gf-form-inline">
+      <div class="gf-form">
+        <label class="gf-form-label width-6">前缀</label>
+        <input type="text" class="gf-form-input width-12" ng-model="ctrl.panel.prefix" ng-change="ctrl.render()" ng-model-onblur>
+      </div>
+      <div class="gf-form">
+        <label class="gf-form-label width-6">字号</label>
+        <div class="gf-form-select-wrapper">
+          <select class="gf-form-input" ng-model="ctrl.panel.prefixFontSize" ng-options="f for f in ctrl.fontSizes" ng-change="ctrl.render()" ng-disabled="!ctrl.canModifyText()"></select>
+        </div>
+      </div>
+    </div>
+    <div class="gf-form-inline">
+      <div class="gf-form">
+        <label class="gf-form-label width-6">后缀</label>
+        <input type="text" class="gf-form-input width-12" ng-model="ctrl.panel.postfix" ng-change="ctrl.render()" ng-model-onblur>
+      </div>
+      <div class="gf-form">
+        <label class="gf-form-label width-6">字号</label>
+        <div class="gf-form-select-wrapper">
+          <select class="input-small gf-form-input" ng-model="ctrl.panel.postfixFontSize" ng-options="f for f in ctrl.fontSizes" ng-change="ctrl.render()" ng-disabled="!ctrl.canModifyText()"></select>
+        </div>
+      </div>
+    </div>
+    <div class="gf-form">
+      <label class="gf-form-label width-6">单位</label>
+      <unit-picker onChange="ctrl.setUnitFormat()" value="ctrl.panel.format" width="18" />
+    </div>
+    <div class="gf-form">
+      <label class="gf-form-label width-6">小数点</label>
+      <input type="number" class="gf-form-input width-18" placeholder="自动" data-placement="right" bs-tooltip="'Override automatic decimal precision for legend and tooltips'" ng-model="ctrl.panel.decimals" ng-change="ctrl.refresh()" ng-model-onblur>
+    </div>
+  </div>
+
+  <div class="section gf-form-group">
+    <h5 class="section-heading">颜色</h5>
+    <div class="gf-form-inline">
+      <gf-form-switch class="gf-form" label-class="width-8" label="背景" checked="ctrl.panel.colorBackground" on-change="ctrl.render()"></gf-form-switch>
+      <gf-form-switch class="gf-form" label-class="width-6" label="值" checked="ctrl.panel.colorValue" on-change="ctrl.render()"></gf-form-switch>
+    </div>
+    <div class="gf-form-inline">
+      <gf-form-switch class="gf-form" label-class="width-8" label="前缀" checked="ctrl.panel.colorPrefix" on-change="ctrl.render()" ng-disabled="!ctrl.canModifyText()"></gf-form-switch>
+      <gf-form-switch class="gf-form" label-class="width-6" label="后缀" checked="ctrl.panel.colorPostfix" on-change="ctrl.render()" ng-disabled="!ctrl.canModifyText()"></gf-form-switch>
+    </div>
+    <div class="gf-form-inline">
+      <div class="gf-form max-width-21">
+        <label class="gf-form-label width-8">阈值
+          <tip>定义两个阈值&lt;br /&gt; 50,80 将产生: value &lt; 50 = Green, 50 &lt;= value &lt; 80 = Yellow, value &gt;= 80 = Red</tip>
+        </label>
+        <input type="text" class="gf-form-input" ng-model="ctrl.panel.thresholds" ng-blur="ctrl.render()" placeholder="50,80"></input>
+      </div>
+    </div>
+    <div class="gf-form">
+      <label class="gf-form-label width-8">颜色</label>
+      <span class="gf-form-label" ng-repeat="color in ctrl.panel.colors track by $index">
+        <color-picker color="color" onChange="ctrl.onColorChange($index)"></color-picker>
+      </span>
+      <span class="gf-form-label">
+        <a  ng-click="ctrl.invertColorOrder()">
+          颠倒
+        </a>
+      </span>
+    </div>
+  </div>
+
+  <div class="section gf-form-group">
+    <h5 class="section-heading">谱线</h5>
+    <gf-form-switch class="gf-form" label-class="width-9" label="显示" checked="ctrl.panel.sparkline.show" on-change="ctrl.refresh()"></gf-form-switch>
+    <div ng-if="ctrl.panel.sparkline.show">
+      <gf-form-switch class="gf-form" label-class="width-9" label="全高" checked="ctrl.panel.sparkline.full" on-change="ctrl.render()"></gf-form-switch>
+      <div class="gf-form">
+        <label class="gf-form-label width-9">Y-最小</label>
+        <input type="number" class="gf-form-input width-5" placeholder="自动" data-placement="right" ng-model="ctrl.panel.sparkline.ymin" ng-change="ctrl.render()" ng-model-onblur empty-to-null>
+      </div>
+      <div class="gf-form">
+        <label class="gf-form-label width-9">Y-最大</label>
+        <input type="number" class="gf-form-input width-5" placeholder="自动" data-placement="right" ng-model="ctrl.panel.sparkline.ymax" ng-change="ctrl.render()" ng-model-onblur empty-to-null>
+      </div>
+      <div class="gf-form">
+        <label class="gf-form-label width-9">线颜色</label>
+        <span class="gf-form-label">
+          <color-picker color="ctrl.panel.sparkline.lineColor" onChange="ctrl.onSparklineColorChange"></color-picker>
+        </span>
+      </div>
+      <div class="gf-form">
+        <label class="gf-form-label width-9">填充颜色</label>
+        <span class="gf-form-label">
+          <color-picker color="ctrl.panel.sparkline.fillColor" onChange="ctrl.onSparklineFillChange"></color-picker>
+        </span>
+      </div>
+    </div>
+  </div>
+
+  <div class="section gf-form-group" ng-if="ctrl.panel.gauge.show">
+    <h5 class="section-heading">测量</h5>
+    <gf-form-switch class="gf-form" label-class="width-10" switch-class="max-width-6" label="显示" checked="ctrl.panel.gauge.show" on-change="ctrl.render()"></gf-form-switch>
+    <div ng-if="ctrl.panel.gauge.show">
+      <div class="gf-form">
+        <label class="gf-form-label width-10">最小</label>
+        <input type="number" class="gf-form-input width-6" placeholder="0" data-placement="right" ng-model="ctrl.panel.gauge.minValue" ng-change="ctrl.refresh()" ng-model-onblur>
+        <label class="gf-form-label alert-state-critical" ng-show="ctrl.invalidGaugeRange">
+          &nbsp; <icon name="'exclamation-triangle'"></icon>
+          最小值大于最大值。
+        </label>
+      </div>
+      <div class="gf-form">
+        <label class="gf-form-label width-10">最大</label>
+        <input type="number" class="gf-form-input width-6" placeholder="0" data-placement="right" ng-model="ctrl.panel.gauge.maxValue" ng-change="ctrl.refresh()" ng-model-onblur>
+      </div>
+      <gf-form-switch class="gf-form" label-class="width-10" switch-class="max-width-6" label="Threshold labels" checked="ctrl.panel.gauge.thresholdLabels" on-change="ctrl.render()"></gf-form-switch>
+      <gf-form-switch class="gf-form" label-class="width-10" switch-class="max-width-6" label="Threshold markers" checked="ctrl.panel.gauge.thresholdMarkers" on-change="ctrl.render()"></gf-form-switch>
+    </div>
+  </div>
+</div>

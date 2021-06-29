@@ -1,0 +1,159 @@
+<div class="gf-form-group">
+  <gf-form-switch
+    class="gf-form"
+    label="块"
+    label-class="width-8"
+    checked="ctrl.panel.bars"
+    on-change="ctrl.render()"
+  ></gf-form-switch>
+
+  <gf-form-switch
+    class="gf-form"
+    label="线"
+    label-class="width-8"
+    checked="ctrl.panel.lines"
+    on-change="ctrl.render()"
+  ></gf-form-switch>
+
+  <div class="gf-form" ng-if="ctrl.panel.lines">
+    <label class="gf-form-label width-8">线宽</label>
+    <div class="gf-form-select-wrapper max-width-5">
+      <select
+        class="gf-form-input"
+        ng-model="ctrl.panel.linewidth"
+        ng-options="f for f in [0,1,2,3,4,5,6,7,8,9,10]"
+        ng-change="ctrl.render()"
+      ></select>
+    </div>
+  </div>
+
+  <gf-form-switch
+    ng-disabled="!ctrl.panel.lines"
+    class="gf-form"
+    label="阶梯"
+    label-class="width-8"
+    checked="ctrl.panel.steppedLine"
+    on-change="ctrl.render()"
+  ></gf-form-switch>
+
+  <div class="gf-form" ng-if="ctrl.panel.lines">
+    <label class="gf-form-label width-8">区域填充</label>
+    <div class="gf-form-select-wrapper max-width-5">
+      <select
+        class="gf-form-input"
+        ng-model="ctrl.panel.fill"
+        ng-options="f for f in [0,1,2,3,4,5,6,7,8,9,10]"
+        ng-change="ctrl.render()"
+      ></select>
+    </div>
+  </div>
+
+  <div class="gf-form" ng-if="ctrl.panel.lines && ctrl.panel.fill">
+    <label class="gf-form-label width-8">填充渐变</label>
+    <div class="gf-form-select-wrapper max-width-5">
+      <select
+        class="gf-form-input"
+        ng-model="ctrl.panel.fillGradient"
+        ng-options="f for f in [0,1,2,3,4,5,6,7,8,9,10]"
+        ng-change="ctrl.render()"
+      ></select>
+    </div>
+  </div>
+
+  <gf-form-switch
+    class="gf-form"
+    label="点"
+    label-class="width-8"
+    checked="ctrl.panel.points"
+    on-change="ctrl.render()"
+  ></gf-form-switch>
+
+  <div class="gf-form" ng-if="ctrl.panel.points">
+    <label class="gf-form-label width-8">点半径</label>
+    <div class="gf-form-select-wrapper max-width-5">
+      <select
+        class="gf-form-input"
+        ng-model="ctrl.panel.pointradius"
+        ng-options="f for f in [0.5,1,2,3,4,5,6,7,8,9,10]"
+        ng-change="ctrl.render()"
+      ></select>
+    </div>
+  </div>
+
+  <gf-form-switch
+    class="gf-form"
+    label="警报阈值"
+    label-class="width-8"
+    checked="ctrl.panel.options.alertThreshold"
+    on-change="ctrl.render()"
+  ></gf-form-switch>
+</div>
+
+<div class="gf-form-group">
+  <h5 class="section-heading">堆叠和空值</h5>
+  <gf-form-switch
+    class="gf-form"
+    label="叠放"
+    label-class="width-7"
+    checked="ctrl.panel.stack"
+    on-change="ctrl.render()"
+  >
+  </gf-form-switch>
+  <gf-form-switch
+    class="gf-form"
+    ng-show="ctrl.panel.stack"
+    label="百分比"
+    label-class="width-7"
+    checked="ctrl.panel.percentage"
+    on-change="ctrl.render()"
+  >
+  </gf-form-switch>
+  <div class="gf-form">
+    <label class="gf-form-label width-7">空值</label>
+    <div class="gf-form-select-wrapper">
+      <select
+        class="gf-form-input max-width-9"
+        ng-model="ctrl.panel.nullPointMode"
+        ng-options="f for f in ['connected', 'null', 'null as zero']"
+        ng-change="ctrl.render()"
+      ></select>
+    </div>
+  </div>
+</div>
+
+<div class="gf-form-group">
+  <h5 class="section-heading">悬停工具提示</h5>
+  <div class="gf-form">
+    <label class="gf-form-label width-9">模式</label>
+    <div class="gf-form-select-wrapper max-width-8">
+      <select
+        class="gf-form-input"
+        ng-model="ctrl.panel.tooltip.shared"
+        ng-options="f.value as f.text for f in [{text: '所有序列', value: true}, {text: '单一', value: false}]"
+        ng-change="ctrl.render()"
+      ></select>
+    </div>
+  </div>
+  <div class="gf-form">
+    <label class="gf-form-label width-9">排序</label>
+    <div class="gf-form-select-wrapper max-width-8">
+      <select
+        class="gf-form-input"
+        ng-model="ctrl.panel.tooltip.sort"
+        ng-options="f.value as f.text for f in [{text: '无', value: 0}, {text: '升序', value: 1}, {text: '降序', value: 2}]"
+        ng-change="ctrl.render()"
+      ></select>
+    </div>
+  </div>
+  <div class="gf-form" ng-show="ctrl.panel.stack">
+    <label class="gf-form-label width-9">堆叠值</label>
+    <div class="gf-form-select-wrapper max-width-8">
+      <select
+        class="gf-form-input"
+        ng-model="ctrl.panel.tooltip.value_type"
+        ng-options="f for f in ['cumulative','individual']"
+        ng-change="ctrl.render()"
+      ></select>
+    </div>
+  </div>
+</div>

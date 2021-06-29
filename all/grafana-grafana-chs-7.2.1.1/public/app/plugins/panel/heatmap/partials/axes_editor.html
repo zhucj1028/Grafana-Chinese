@@ -1,0 +1,105 @@
+<div class="editor-row">
+  <div class="section gf-form-group">
+    <h5 class="section-heading">Y轴</h5>
+    <div class="gf-form">
+      <label class="gf-form-label width-8">单位</label>
+      <unit-picker onChange="editor.setUnitFormat" value="ctrl.panel.yAxis.format" class="width-12"></unit-picker>
+    </div>
+    <div ng-if="ctrl.panel.dataFormat == 'timeseries'">
+      <div class="gf-form">
+        <label class="gf-form-label width-8">比例</label>
+        <div class="gf-form-select-wrapper width-12">
+          <select class="gf-form-input" ng-model="ctrl.panel.yAxis.logBase" ng-options="v as k for (k, v) in editor.logScales" ng-change="ctrl.refresh()"></select>
+        </div>
+      </div>
+      <div class="gf-form">
+        <label class="gf-form-label width-8">Y-最小</label>
+        <input type="text" class="gf-form-input width-12" placeholder="自动" empty-to-null ng-model="ctrl.panel.yAxis.min" ng-change="ctrl.render()" ng-model-onblur>
+      </div>
+      <div class="gf-form">
+        <label class="gf-form-label width-8">Y-最大</label>
+        <input type="text" class="gf-form-input width-12" placeholder="自动" empty-to-null ng-model="ctrl.panel.yAxis.max" ng-change="ctrl.render()" ng-model-onblur>
+      </div>
+    </div>
+    <div class="gf-form">
+      <label class="gf-form-label width-8">小数点</label>
+      <input type="number" class="gf-form-input width-12" placeholder="自动" data-placement="right"
+      bs-tooltip="'覆盖轴的自动十进制精度。'"
+      ng-model="ctrl.panel.yAxis.decimals" ng-change="ctrl.render()" ng-model-onblur>
+    </div>
+    <div class="gf-form" ng-if="ctrl.panel.dataFormat == 'tsbuckets'">
+      <label class="gf-form-label width-8">桶装</label>
+      <div class="gf-form-select-wrapper max-width-12">
+        <select class="gf-form-input"
+          ng-model="ctrl.panel.yBucketBound" ng-options="v as k for (k, v) in editor.yBucketBoundModes" ng-change="ctrl.render()"
+          data-placement="right" bs-tooltip="'使用序列标签作为约束上限或下限桶。'">
+        </select>
+      </div>
+    </div>
+    <gf-form-switch ng-if="ctrl.panel.dataFormat == 'tsbuckets'"
+      class="gf-form" label-class="width-8"
+      label="相反的顺序"
+      checked="ctrl.panel.reverseYBuckets" on-change="ctrl.refresh()">
+    </gf-form-switch>
+  </div>
+
+  <div class="section gf-form-group" ng-if="ctrl.panel.dataFormat == 'timeseries'">
+    <h5 class="section-heading">桶</h5>
+    <div class="gf-form-inline">
+      <div class="gf-form">
+        <label class="gf-form-label width-4">Y轴</label>
+      </div>
+      <div class="gf-form" ng-show="ctrl.panel.yAxis.logBase === 1">
+        <label class="gf-form-label width-5">桶</label>
+        <input type="number" class="gf-form-input width-5" placeholder="自动" data-placement="right"
+                                                                              bs-tooltip="'桶Y轴的数量。'"
+                                                                              ng-model="ctrl.panel.yBucketNumber" ng-change="ctrl.refresh()" ng-model-onblur>
+      </div>
+      <div class="gf-form" ng-show="ctrl.panel.yAxis.logBase === 1">
+        <label class="gf-form-label width-4">尺寸</label>
+        <input type="number" class="gf-form-input width-5" placeholder="自动" data-placement="right"
+                                                                              bs-tooltip="'桶的容量。 优先于存储桶选项。'"
+                                                                              ng-model="ctrl.panel.yBucketSize" ng-change="ctrl.refresh()" ng-model-onblur>
+      </div>
+      <div class="gf-form" ng-show="ctrl.panel.yAxis.logBase !== 1">
+        <label class="gf-form-label width-10">分裂因子</label>
+        <input type="number"
+               class="gf-form-input width-9"
+               placeholder="1"
+               data-placement="right"
+               bs-tooltip="'仅用于对数刻度。 默认情况下，Y值除以对数基数的整数次幂（log2为1、2、4、8、16，...）。 此选项允许将每个默认存储桶拆分为指定数量的存储桶。'"
+               ng-model="ctrl.panel.yAxis.splitFactor" ng-change="ctrl.refresh()" ng-model-onblur>
+        </input>
+      </div>
+    </div>
+    <div class="gf-form-inline">
+      <div class="gf-form">
+        <label class="gf-form-label width-4">X轴</label>
+      </div>
+      <div class="gf-form">
+        <label class="gf-form-label width-5">桶</label>
+        <input type="number" class="gf-form-input width-5" placeholder="自动" data-placement="right"
+                                                                              bs-tooltip="'桶进行X轴的数量。'"
+                                                                              ng-model="ctrl.panel.xBucketNumber" ng-change="ctrl.refresh()" ng-model-onblur>
+      </div>
+      <div class="gf-form">
+        <label class="gf-form-label width-4">尺寸</label>
+        <input type="text" class="gf-form-input width-5" placeholder="自动" data-placement="right"
+                                                                            bs-tooltip="'桶的容量。 数字或间隔（10s，5m，1h等）。 支持的时间间隔：ms，s，m，h，d，w，M，y。 优先于存储桶选项。'"
+                                                                            ng-model="ctrl.panel.xBucketSize" ng-change="ctrl.refresh()" ng-model-onblur>
+      </div>
+    </div>
+  </div>
+
+  <div class="section gf-form-group">
+    <h5 class="section-heading">数据格式</h5>
+    <div class="gf-form">
+      <label class="gf-form-label width-5">格式化</label>
+      <div class="gf-form-select-wrapper max-width-15">
+        <select class="gf-form-input" ng-model="ctrl.panel.dataFormat" ng-options="v as k for (k, v) in editor.dataFormats" ng-change="ctrl.render()"
+          data-placement="right" bs-tooltip="'时间序列：根据常规时间序列创建热图。 <br>时间序列段：使用从数据源返回的直方图数据。 每个序列代表一个桶，其上/下限是一个序列标签。'">
+        </select>
+      </div>
+    </div>
+  </div>
+</div>

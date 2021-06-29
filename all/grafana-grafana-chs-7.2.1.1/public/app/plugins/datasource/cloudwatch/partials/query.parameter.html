@@ -1,0 +1,93 @@
+<div class="gf-form-inline">
+  <div class="gf-form">
+    <label class="gf-form-label query-keyword width-8">地区</label>
+    <metric-segment segment="regionSegment" get-options="getRegions()" on-change="regionChanged()"></metric-segment>
+  </div>
+
+  <div class="gf-form gf-form--grow">
+    <div class="gf-form-label gf-form-label--grow"></div>
+  </div>
+</div>
+
+<div class="gf-form-inline" ng-if="target.expression.length === 0">
+  <div class="gf-form">
+    <label class="gf-form-label query-keyword width-8">度量</label>
+
+    <metric-segment segment="namespaceSegment" get-options="getNamespaces()" on-change="namespaceChanged()">
+    </metric-segment>
+    <metric-segment segment="metricSegment" get-options="getMetrics()" on-change="metricChanged()"></metric-segment>
+  </div>
+
+  <div class="gf-form">
+    <label class="gf-form-label query-keyword">状态</label>
+  </div>
+
+  <div class="gf-form" ng-repeat="segment in statSegments">
+    <metric-segment segment="segment" get-options="getStatSegments(segment, $index)"
+      on-change="statSegmentChanged(segment, $index)"></metric-segment>
+  </div>
+
+  <div class="gf-form gf-form--grow">
+    <div class="gf-form-label gf-form-label--grow"></div>
+  </div>
+</div>
+
+<div class="gf-form-inline" ng-if="target.expression.length === 0">
+  <div class="gf-form">
+    <label class="gf-form-label query-keyword width-8">规模</label>
+    <metric-segment ng-repeat="segment in dimSegments" segment="segment" get-options="getDimSegments(segment, $index)"
+      on-change="dimSegmentChanged(segment, $index)"></metric-segment>
+  </div>
+
+  <div class="gf-form gf-form--grow">
+    <div class="gf-form-label gf-form-label--grow"></div>
+  </div>
+</div>
+
+<div class="gf-form-inline" ng-if="target.statistics.length === 1">
+  <div class="gf-form">
+    <label class=" gf-form-label query-keyword width-8 ">
+      Id
+      <info-popover mode="right-normal ">Id可以包括数字、字母和下划线，并且必须以小写字母开头。</info-popover>
+    </label>
+    <input type="text " class="gf-form-input " ng-model="target.id " spellcheck="false"
+      ng-pattern="/^[a-z][a-zA-Z0-9_]*$/" ng-model-onblur ng-change="onChange() " />
+  </div>
+  <div class="gf-form max-width-30 ">
+    <label class="gf-form-label query-keyword width-7 ">表达式</label>
+    <input type="text " class="gf-form-input " ng-model="target.expression
+ " spellcheck="false" ng-model-onblur ng-change="onChange() " />
+  </div>
+</div>
+
+<div class="gf-form-inline ">
+  <div class="gf-form ">
+    <label class="gf-form-label query-keyword width-8 ">
+      最小周期
+      <info-popover mode="right-normal ">点之间的最小间隔（秒）</info-popover>
+    </label>
+    <input type="text " class="gf-form-input " ng-model="target.period " spellcheck="false" placeholder="自动
+ " ng-model-onblur ng-change="onChange() " />
+  </div>
+  <div class="gf-form max-width-30 ">
+    <label class="gf-form-label query-keyword width-7 ">别名</label>
+    <input type="text " class="gf-form-input " ng-model="target.alias " spellcheck="false" ng-model-onblur
+      ng-change="onChange() " />
+    <info-popover mode="right-absolute ">
+      别名替换变量：
+      <ul ng-non-bindable>
+        <li>{{ metric }}</li>
+        <li>{{ stat }}</li>
+        <li>{{ namespace }}</li>
+        <li>{{ region }}</li>
+        <li>{{ period }}</li>
+        <li>{{ label }}</li>
+        <li>{{ YOUR_DIMENSION_NAME }}</li>
+      </ul>
+    </info-popover>
+  </div>
+
+  <div class="gf-form gf-form--grow ">
+    <div class="gf-form-label gf-form-label--grow "></div>
+  </div>
+</div>

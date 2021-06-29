@@ -1,0 +1,149 @@
+
+<h3 class="page-heading">PostgreSQL链接</h3>
+
+<div class="gf-form-group">
+	<div class="gf-form max-width-30">
+		<span class="gf-form-label width-10">主机</span>
+		<input type="text" class="gf-form-input" ng-model='ctrl.current.url' placeholder="localhost:5432" bs-typeahead="{{['localhost:5432', 'localhost:5433']}}" required></input>
+	</div>
+
+	<div class="gf-form max-width-30">
+		<span class="gf-form-label width-10">数据库</span>
+		<input type="text" class="gf-form-input" ng-model='ctrl.current.database' placeholder="数据库名" required></input>
+	</div>
+
+	<div class="gf-form-inline">
+		<div class="gf-form max-width-15">
+			<span class="gf-form-label width-10">用户</span>
+			<input type="text" class="gf-form-input" ng-model='ctrl.current.user' placeholder="user"></input>
+		</div>
+    <div class="gf-form">
+      <secret-form-field
+        isConfigured="ctrl.current.secureJsonFields.password"
+        value="ctrl.current.secureJsonData.password"
+        on-reset="ctrl.onPasswordReset"
+        on-change="ctrl.onPasswordChange"
+        inputWidth="9"
+      />
+    </div>
+  </div>
+  <div class="gf-form">
+    <label class="gf-form-label width-10">SSL模式</label>
+    <div class="gf-form-select-wrapper max-width-15 gf-form-select-wrapper--has-help-icon">
+      <select class="gf-form-input" ng-model="ctrl.current.jsonData.sslmode" ng-options="mode for mode in ['disable', 'require', 'verify-ca', 'verify-full']" ng-init="ctrl.current.jsonData.sslmode"></select>
+      <info-popover mode="right-absolute">
+        此选项确定是否与服务器协商安全SSL（TLS）TCP / IP连接的优先级或优先级。
+      </info-popover>
+    </div>
+  </div>
+  <div class="gf-form max-width-30" ng-if="ctrl.current.jsonData.sslmode != 'disable'">
+    <span class="gf-form-label width-10">SSL根证书</span>
+    <input type="text" class="gf-form-input gf-form-input--has-help-icon" ng-model='ctrl.current.jsonData.sslRootCertFile' placeholder="SSL/TLS根证书文件"></input>
+    <info-popover mode="right-absolute">
+		如果选择的SSL模式需要服务器根证书，请在此处提供文件的路径。
+		确保执行grafana程序的用户可以读取该文件。
+    </info-popover>
+  </div>
+  <div class="gf-form max-width-30" ng-if="ctrl.current.jsonData.sslmode != 'disable'">
+    <span class="gf-form-label width-10">SSL客户证书</span>
+    <input type="text" class="gf-form-input gf-form-input--has-help-icon" ng-model='ctrl.current.jsonData.sslCertFile' placeholder="SSL/TLS客户证书文件"></input>
+    <info-popover mode="right-absolute">
+		要使用SSL / TLS客户端证书进行身份验证，请在此处提供文件的路径。
+		确保执行grafana程序的用户可以读取该文件。
+    </info-popover>
+  </div>
+  <div class="gf-form max-width-30" ng-if="ctrl.current.jsonData.sslmode != 'disable'">
+    <span class="gf-form-label width-10">SSL客户端密钥</span>
+    <input type="text" class="gf-form-input gf-form-input--has-help-icon" ng-model='ctrl.current.jsonData.sslKeyFile' placeholder="SSL/TLS客户端密钥文件"></input>
+    <info-popover mode="right-absolute">
+		要使用客户端SSL / TLS证书进行身份验证，请在此处提供相应密钥文件的路径。
+		确保执行grafana进程的用户仅<i> </i>可以读取该文件。
+    </info-popover>
+  </div>
+</div>
+
+<b>链接限制</b>
+
+<div class="gf-form-group">
+	<div class="gf-form max-width-15">
+		<span class="gf-form-label width-7">最大开放</span>
+		<input type="number" min="0" class="gf-form-input gf-form-input--has-help-icon" ng-model="ctrl.current.jsonData.maxOpenConns" placeholder="无限制"></input>
+		<info-popover mode="right-absolute">
+			与数据库的最大打开连接数。 如果<i>最大空闲连接数</i>大于0，并且<i>最大打开连接数</i>小于<i>最大空闲连接数</i>，则<i>最大空闲连接数</i>将减少以符合<i>最大打开连接数</i>限制。 如果设置为0，则打开的连接数没有限制。
+		</info-popover>
+	</div>
+	<div class="gf-form max-width-15">
+		<span class="gf-form-label width-7">最大空闲</span>
+		<input type="number" min="0" class="gf-form-input gf-form-input--has-help-icon" ng-model="ctrl.current.jsonData.maxIdleConns" placeholder="2"></input>
+		<info-popover mode="right-absolute">
+			空闲连接池中的最大连接数。 如果<i>最大打开连接数</i>大于0但小于<i>最大空闲连接数</i>，则<i>最大空闲连接数</i>将减少以匹配<i >最大开放连接数</i>限制。 如果设置为0，则不保留任何空闲连接。
+		</info-popover>
+	</div>
+	<div class="gf-form max-width-15">
+		<span class="gf-form-label width-7">最大寿命</span>
+		<input type="number" min="0" class="gf-form-input gf-form-input--has-help-icon" ng-model="ctrl.current.jsonData.connMaxLifetime" placeholder="14400"></input>
+		<info-popover mode="right-absolute">
+			连接可以重用的最长时间（以秒为单位）。 如果设置为0，则连接将永远重复使用。
+		</info-popover>
+	</div>
+</div>
+
+<h3 class="page-heading">PostgreSQL细节</h3>
+
+<div class="gf-form-group">
+	<div class="gf-form">
+		<span class="gf-form-label width-9">
+			版本
+			<info-popover mode="right-normal" position="top center">
+				此选项控制PostgreSQL查询构建器中可用的功能。
+			</info-popover>
+		</span>
+		<span class="gf-form-select-wrapper">
+			<select class="gf-form-input gf-size-auto" ng-model="ctrl.current.jsonData.postgresVersion" ng-options="f.value as f.name for f in ctrl.postgresVersions"></select>
+		</span>
+	</div>
+	<div class="gf-form">
+		<gf-form-switch class="gf-form" label="时序数据库" label-class="width-9" checked="ctrl.current.jsonData.timescaledb" switch-class="max-width-6"></gf-form-switch>
+    <label class="gf-form-label query-keyword pointer" ng-click="ctrl.toggleTimescaleDBHelp()">
+      帮助&nbsp;
+      <icon name="'angle-down'" ng-show="ctrl.showTimescaleDBHelp"></icon>
+      <icon name="'angle-right'" ng-hide="ctrl.showTimescaleDBHelp">&nbsp;</icon>
+    </label>
+	</div>
+
+	<div class="gf-form-inline">
+		<div class="gf-form">
+			<span class="gf-form-label width-9">最小时间间隔</span>
+			<input
+        type="text"
+        class="gf-form-input width-6 gf-form-input--has-help-icon"
+        ng-model="ctrl.current.jsonData.timeInterval"
+        spellcheck='false'
+        placeholder="1m"
+        ng-pattern="/^\d+(ms|[Mwdhmsy])$/"
+      ></input>
+			<info-popover mode="right-absolute">
+				自动分组时间间隔的下限。 建议设置为写入频率，例如，如果每分钟写入一次数据，则为<code> 1m </code>。
+			</info-popover>
+		</div>
+	</div>
+<div class="grafana-info-box alert alert-info" ng-show="ctrl.showTimescaleDBHelp">
+  <div class="alert-body">
+    <p>
+			<a href="https://github.com/timescale/timescaledb" class="pointer" target="_blank">时序数据库</a> 是构建为PostgreSQL扩展的时间序列数据库。 如果启用，Grafana将在<code> $__timeGroup </code>宏中使用<code> time_bucket </code>，并在查询生成器中显示特定于TimescaleDB的聚合函数。
+    </p>
+  </div>
+</div>
+
+</div>
+
+
+<div class="gf-form-group">
+	<div class="grafana-info-box">
+		<h5>用户权限</h5>
+		<p>
+			仅应向数据库用户授予要查询的指定数据库&amp;表的SELECT权限。
+Grafana无法验证查询是否安全，因此查询可以包含任何SQL语句。 例如，将执行诸如<code> DELETE FROM user; </code>和<code> DROP TABLE user; </code>之类的语句。 为了防止这种情况，我们<strong>高度</strong>建议您创建一个具有受限权限的特定PostgreSQL用户。
+		</p>
+	</div>
+</div>

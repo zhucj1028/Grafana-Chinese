@@ -1,0 +1,45 @@
+<!-- This email is sent when an existing user is added to an organization -->
+
+[[Subject .Subject "[[.InvitedBy]] 已将您添加到 [[.OrgName]] organization"]]
+
+<table class="row">
+  <tr>
+    <td class="wrapper last">
+      <table class="twelve columns">
+        <tr>
+          <td>
+            <h4 class="center">您已添加到[[.OrgName]]</h4>
+          </td>
+          <td class="expander"></td>
+        </tr>
+      </table>
+    </td>
+  </tr>
+</table>
+
+<table class="row">
+  <tr>
+    <td class="wrapper last">
+      <table class="twelve columns">
+        <tr>
+          <td class="center">
+            <p><b>[[.InvitedBy]]</b> 已将您添加到 <b>[[.OrgName]]</b> Grafana组织。</p>
+            <p>登录后，[[.OrgName]] 将在左侧菜单中用户名下方的下拉菜单中提供。</p>
+          </td>
+          <td class="expander"></td>
+        </tr>
+        <tr>
+          <td class="center">
+            <table class="better-button" align="center" border="0" cellspacing="0" cellpadding="0">
+              <tr>
+                <td align="center" class="better-button" bgcolor="#ff8f2b">
+                  <a href="[[.AppUrl]]" target="_blank">登陆</a>
+                </td>
+              </tr>
+            </table>
+          </td>
+        </tr>
+      </table>
+    </td>
+  </tr>
+</table>

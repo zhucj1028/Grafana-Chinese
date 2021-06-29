@@ -1,0 +1,127 @@
+<div>
+  <div class="section gf-form-group">
+    <h5 class="section-heading">选项</h5>
+    <div class="gf-form">
+      <span class="gf-form-label width-8">显示</span>
+      <div class="gf-form-select-wrapper max-width-15">
+        <select
+          class="gf-form-input"
+          ng-model="ctrl.panel.show"
+          ng-options="f.value as f.text for f in ctrl.showOptions"
+          ng-change="ctrl.onRefresh()"
+        ></select>
+      </div>
+    </div>
+    <div class="gf-form">
+      <span class="gf-form-label width-8">最多项目</span>
+      <input type="text" class="gf-form-input max-width-15" ng-model="ctrl.panel.limit" ng-change="ctrl.onRefresh()" />
+    </div>
+    <div class="gf-form" ng-show="ctrl.panel.show === 'current'">
+      <span class="gf-form-label width-8">排序</span>
+      <div class="gf-form-select-wrapper max-width-15">
+        <select
+          class="gf-form-input"
+          ng-model="ctrl.panel.sortOrder"
+          ng-options="f.value as f.text for f in ctrl.sortOrderOptions"
+          ng-change="ctrl.onRefresh()"
+        ></select>
+      </div>
+    </div>
+    <gf-form-switch
+      class="gf-form"
+      label="来自此仪表板的警报"
+      label-class="width-18"
+      checked="ctrl.panel.onlyAlertsOnDashboard"
+      on-change="ctrl.updateStateFilter()"
+    ></gf-form-switch>
+  </div>
+  <div class="section gf-form-group" ng-show="ctrl.panel.show === 'current'">
+    <h5 class="section-heading">过滤</h5>
+    <div class="gf-form">
+      <span class="gf-form-label width-8">警报名称</span>
+      <input
+        type="text"
+        class="gf-form-input max-width-15"
+        ng-model="ctrl.panel.nameFilter"
+        placeholder="警报名称查询"
+        ng-change="ctrl.onRefresh()"
+      />
+    </div>
+    <div class="gf-form">
+      <span class="gf-form-label width-8">仪表板标题</span>
+      <input
+        type="text"
+        class="gf-form-input"
+        placeholder="仪表板标题查询"
+        ng-model="ctrl.panel.dashboardFilter"
+        ng-change="ctrl.onRefresh()"
+        ng-model-onblur
+      />
+    </div>
+    <div class="gf-form">
+      <folder-picker
+        initial-folder-id="ctrl.panel.folderId"
+        on-change="ctrl.onFolderChange"
+        label-class="width-8"
+        initial-title="'All'"
+        enable-reset="true"
+      >
+      </folder-picker>
+    </div>
+    <div class="gf-form">
+      <span class="gf-form-label width-8">仪表板标签</span>
+      <bootstrap-tagsinput
+        ng-model="ctrl.panel.dashboardTags"
+        tagclass="label label-tag"
+        placeholder="添加标签"
+        on-tags-updated="ctrl.refresh()"
+      >
+      </bootstrap-tagsinput>
+    </div>
+  </div>
+  <div class="section gf-form-group" ng-show="ctrl.panel.show === 'current'">
+    <h5 class="section-heading">状态过滤</h5>
+    <gf-form-switch
+      class="gf-form"
+      label="好的"
+      label-class="width-10"
+      checked="ctrl.stateFilter['ok']"
+      on-change="ctrl.updateStateFilter()"
+    ></gf-form-switch>
+    <gf-form-switch
+      class="gf-form"
+      label="暂停的"
+      label-class="width-10"
+      checked="ctrl.stateFilter['paused']"
+      on-change="ctrl.updateStateFilter()"
+    ></gf-form-switch>
+    <gf-form-switch
+      class="gf-form"
+      label="无数据"
+      label-class="width-10"
+      checked="ctrl.stateFilter['no_data']"
+      on-change="ctrl.updateStateFilter()"
+    ></gf-form-switch>
+    <gf-form-switch
+      class="gf-form"
+      label="执行错误"
+      label-class="width-10"
+      checked="ctrl.stateFilter['execution_error']"
+      on-change="ctrl.updateStateFilter()"
+    ></gf-form-switch>
+    <gf-form-switch
+      class="gf-form"
+      label="警报中"
+      label-class="width-10"
+      checked="ctrl.stateFilter['alerting']"
+      on-change="ctrl.updateStateFilter()"
+    ></gf-form-switch>
+    <gf-form-switch
+      class="gf-form"
+      label="触发警报中"
+      label-class="width-10"
+      checked="ctrl.stateFilter['pending']"
+      on-change="ctrl.updateStateFilter()"
+    ></gf-form-switch>
+  </div>
+</div>
