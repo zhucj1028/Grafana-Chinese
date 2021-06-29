@@ -4,7 +4,7 @@
 在官网下载对应的7.2.1版本：https://grafana.com/grafana/download/7.2.1
 
 - Grafana-chs-7.2.1
-  - all#已经汉化好了但是没有编译
+  - all#已经汉化好了但是没有编译过的文件
   - bin-Linux #Linux下启动文件
   - bin-Windows #Windows下启动文件
   - public #前端汉化界面Windows和Linux都可以使用
@@ -19,7 +19,7 @@
 
 #### 1.2、安装yarn
 
-**注：**这里安装环境就不细讲
+注：这里安装环境就不细讲
 
 ### 2、后端编译环境
 
@@ -65,13 +65,13 @@ go version go1.15.6 linux/amd64
 [root@iZwz97c9sssg8bbb97x5Z go]# mkdir goProject
 ```
 
-**注：**我们编译时必须将需要编译的文件放入工作目录，放入其他位置不可。
+注：我们编译时必须将需要编译的文件放入工作目录，放入其他位置不可。
 
 
 
 ### 3、编译和运行
 
-**注：**将下载好的`Grafana`汉化压缩文件上传并解压到我们创建的工作目录
+注：将下载好的`Grafana`汉化压缩文件上传并解压到我们创建的工作目录
 
 #### 3.1、前端环境
 
@@ -88,7 +88,7 @@ go version go1.15.6 linux/amd64
 
 #### 3.2、后端环境
 
-**注：**
+注：
 
 ​	1、在Windows下编译后端时可能会提示没有`Gcc`环境下载一个即可
 
